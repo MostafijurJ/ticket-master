@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for gateway-service" enabled="true">
+      <profile name="Annotation profile for search-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -12,6 +12,7 @@
         <module name="discovery-server" />
         <module name="event-service" />
         <module name="search-service" />
+        <module name="gateway-service" />
         <module name="gateway-service-app" />
       </profile>
     </annotationProcessing>
@@ -20,6 +21,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="discovery-server" options="-parameters" />
       <module name="event-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
       <module name="gateway-service-app" options="-parameters" />
       <module name="search-service" options="-parameters" />
     </option>
