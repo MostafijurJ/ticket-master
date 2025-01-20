@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.learn.ms</groupId>
 	<artifactId>search-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<name>search-service</name>
 	<description>This Service is responsible for all the search related tasks</description>
 	<url/>
@@ -43,8 +43,10 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.28</version> <!-- Use the latest version -->
+			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

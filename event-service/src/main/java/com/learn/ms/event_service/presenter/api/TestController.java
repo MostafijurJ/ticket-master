@@ -1,4 +1,4 @@
-package com.learn.ms.event_service.api;
+package com.learn.ms.event_service.presenter.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
