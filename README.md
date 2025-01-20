@@ -1,4 +1,4 @@
-## Add Documentations
+## Documentations
 This project is a Spring Boot application that serves as a gateway service. It uses Spring Cloud Gateway to route requests to different microservices and includes rate limiting configuration.
 
 ### Key Components
