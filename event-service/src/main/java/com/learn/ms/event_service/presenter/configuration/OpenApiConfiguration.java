@@ -40,7 +40,9 @@ public class OpenApiConfiguration {
         final var securityItemUserContext = new SecurityRequirement().addList(SecurityScheme.Type.APIKEY.name());
         final var securityItemForGateway = new SecurityRequirement().addList(SecurityScheme.Type.OPENIDCONNECT.name());
 
-        return new OpenAPI().info(info).servers(List.of(new Server().url("/"), new Server().url("/".concat(applicationName))))
+        return new OpenAPI()
+                .info(info)
+                .servers(List.of(new Server().url("/"), new Server().url("/".concat(applicationName))))
                 .security(List.of(securityItemForGateway, securityItemUserContext))
                 .components(components);
     }
@@ -48,7 +50,10 @@ public class OpenApiConfiguration {
     @Bean
     public OpenApiCustomizer openApiCustomizer() {
         return openApi -> {
-            final var stream = openApi.getPaths().values().stream().flatMap(pathItem -> pathItem.readOperations().stream());
+            final var stream = openApi.getPaths()
+                    .values()
+                    .stream()
+                    .flatMap(pathItem -> pathItem.readOperations().stream());
             final Schema<?> schema = new StringSchema().type("string")._enum(List.of("EN", "BN"));
             stream.forEach(operation -> operation.addParametersItem(new HeaderParameter().name("Accept-Language").in("header").required(true).schema(schema)));
         };

@@ -15,6 +15,20 @@
     <description>This Service is responsible for routing and gateway tasks</description>
     <url/>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Mostafijur Rahman</name>
+            <email>mostafijurj@gmail.com</email>
+        </developer>
+    </developers>
+
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2024.0.0</spring-cloud.version>

@@ -1,0 +1,16 @@
+
+server:
+  port: 8082
+  shutdown: graceful
+  max-http-request-header-size: 2MB
+
+spring:
+  application:
+    profiles:
+      active: dev
+    name: event-service
+  lifecycle:
+    timeout-per-shutdown-phase: "120s"
+
+springdoc:
+  paths-to-exclude: /swagger-resources/**, /v3/api-docs/**, /v2/api-docs/**
