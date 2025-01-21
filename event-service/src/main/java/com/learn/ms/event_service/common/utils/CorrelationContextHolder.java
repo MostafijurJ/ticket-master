@@ -2,10 +2,7 @@ package com.learn.ms.event_service.common.utils;
 
 import org.slf4j.MDC;
 
-/**
- * Author: Md. Himon Shekh
- * Date: 12/2/2023 12:46 AM
- */
+
 public final class CorrelationContextHolder {
     private static final String CORRELATION_ID = "correlationId";
 

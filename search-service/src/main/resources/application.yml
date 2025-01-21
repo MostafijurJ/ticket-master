@@ -1,14 +1,15 @@
+server:
+  port: 1133
+  shutdown: graceful
+  max-http-request-header-size: 2MB
+
 spring:
+  profiles:
+    active: dev
   application:
     name: search-service
+  lifecycle:
+    timeout-per-shutdown-phase: "120s"
 
-server:
-  port: 8083
-
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    prefer-ip-address: true
+springdoc:
+  paths-to-exclude: /swagger-resources/**, /v3/api-docs/**, /v2/api-docs/**

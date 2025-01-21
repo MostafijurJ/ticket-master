@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServiceTracingAspect extends CommonTraceLoggerAspect {
 
-    @Pointcut("execution(public * com.learn.ms.event_service.presenter.api..*.*(..))")
+    @Pointcut("execution(public * com.learn.ms.event_service.presenter.rest.api.*.*(..))")
     public void controllerAspect() {
     }
 

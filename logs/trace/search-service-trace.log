@@ -1,0 +1,42 @@
+2025-01-21 23:01:08.476 TRACE [Service Name: search-service, TraceId: 9f3e5fe215d3062a41940fc0001f340a, SpanId: 44033315305fc5d3] --- [http-nio-1133-exec-1] traceLogger                              : Invoking : 
+Class: com.learn.ms.search_service.presenter.rest.api.HomeResource 
+Method: getApiResponse 
+Arguments Name: [] 
+Arguments Value: 
+
+2025-01-21 23:01:08.479 TRACE [Service Name: search-service, TraceId: 9f3e5fe215d3062a41940fc0001f340a, SpanId: 44033315305fc5d3] --- [http-nio-1133-exec-1] traceLogger                              : Invocation Returned: com.learn.ms.search_service.presenter.rest.api.HomeResource.getApiResponse Response: {"responseCode":"S100000","responseMessage":"Successfully Done.","data":"Search Service is running!"}
+2025-01-21 23:02:13.330 TRACE [Service Name: search-service, TraceId: dd0e5f7772c5ebd0a73fa07d938a3595, SpanId: eaf4d4579c22fa9d] --- [http-nio-1133-exec-4] traceLogger                              : Invoking : 
+Class: com.learn.ms.search_service.presenter.rest.api.HomeResource 
+Method: getApiResponse 
+Arguments Name: [] 
+Arguments Value: 
+
+2025-01-21 23:02:13.331 TRACE [Service Name: search-service, TraceId: dd0e5f7772c5ebd0a73fa07d938a3595, SpanId: eaf4d4579c22fa9d] --- [http-nio-1133-exec-4] traceLogger                              : Invocation Returned: com.learn.ms.search_service.presenter.rest.api.HomeResource.getApiResponse Response: {"responseCode":"S100000","responseMessage":"Successfully Done.","data":"Search Service is running!"}
+2025-01-21 23:02:16.687 TRACE [Service Name: search-service, TraceId: b4c330d97026188c86af6111f1211848, SpanId: 5a23c002cc8a2db7] --- [http-nio-1133-exec-5] traceLogger                              : Invoking : 
+Class: com.learn.ms.search_service.presenter.rest.api.HomeResource 
+Method: getApiResponse 
+Arguments Name: [] 
+Arguments Value: 
+
+2025-01-21 23:02:16.688 TRACE [Service Name: search-service, TraceId: b4c330d97026188c86af6111f1211848, SpanId: 5a23c002cc8a2db7] --- [http-nio-1133-exec-5] traceLogger                              : Invocation Returned: com.learn.ms.search_service.presenter.rest.api.HomeResource.getApiResponse Response: {"responseCode":"S100000","responseMessage":"Successfully Done.","data":"Search Service is running!"}
+2025-01-21 23:02:17.787 TRACE [Service Name: search-service, TraceId: 99575dc2764e302053c071a74f6ac57a, SpanId: 3242c4d677636f12] --- [http-nio-1133-exec-6] traceLogger                              : Invoking : 
+Class: com.learn.ms.search_service.presenter.rest.api.HomeResource 
+Method: getApiResponse 
+Arguments Name: [] 
+Arguments Value: 
+
+2025-01-21 23:02:17.788 TRACE [Service Name: search-service, TraceId: 99575dc2764e302053c071a74f6ac57a, SpanId: 3242c4d677636f12] --- [http-nio-1133-exec-6] traceLogger                              : Invocation Returned: com.learn.ms.search_service.presenter.rest.api.HomeResource.getApiResponse Response: {"responseCode":"S100000","responseMessage":"Successfully Done.","data":"Search Service is running!"}
+2025-01-21 23:02:21.506 TRACE [Service Name: search-service, TraceId: dbc4e19131012e9b693ec270059f9de6, SpanId: 9131ce932ee84a32] --- [http-nio-1133-exec-7] traceLogger                              : Invoking : 
+Class: com.learn.ms.search_service.presenter.rest.api.HomeResource 
+Method: test 
+Arguments Name: [] 
+Arguments Value: 
+
+2025-01-21 23:02:21.506 TRACE [Service Name: search-service, TraceId: dbc4e19131012e9b693ec270059f9de6, SpanId: 9131ce932ee84a32] --- [http-nio-1133-exec-7] traceLogger                              : Invocation Returned: com.learn.ms.search_service.presenter.rest.api.HomeResource.test Response: "Search Service is running!"
+2025-01-21 23:02:23.572 TRACE [Service Name: search-service, TraceId: 4df513052221a9cdaccb3993c46eaba8, SpanId: 6f23df9616121671] --- [http-nio-1133-exec-8] traceLogger                              : Invoking : 
+Class: com.learn.ms.search_service.presenter.rest.api.HomeResource 
+Method: test 
+Arguments Name: [] 
+Arguments Value: 
+
+2025-01-21 23:02:23.572 TRACE [Service Name: search-service, TraceId: 4df513052221a9cdaccb3993c46eaba8, SpanId: 6f23df9616121671] --- [http-nio-1133-exec-8] traceLogger                              : Invocation Returned: com.learn.ms.search_service.presenter.rest.api.HomeResource.test Response: "Search Service is running!"

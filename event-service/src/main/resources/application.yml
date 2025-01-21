@@ -1,13 +1,12 @@
-
 server:
   port: 8082
   shutdown: graceful
   max-http-request-header-size: 2MB
 
 spring:
+  profiles:
+    active: dev
   application:
-    profiles:
-      active: dev
     name: event-service
   lifecycle:
     timeout-per-shutdown-phase: "120s"

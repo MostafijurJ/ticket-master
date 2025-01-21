@@ -19,7 +19,7 @@ public abstract class CommonTraceLoggerAspect extends BaseLoggerAspect {
             String jsonResponse = serializeResponseToJson(joinPoint, response);
             String formattedResponse = String.format("Invocation Returned: %s", jsonResponse);
             traceLogger.trace(formattedResponse);
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             errorLogger.error(ex.getMessage(), ex);
             traceLogger.trace("Exception Occurred: " + ex.getMessage());
             throw ex;

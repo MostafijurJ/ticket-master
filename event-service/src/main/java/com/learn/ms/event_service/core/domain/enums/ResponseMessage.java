@@ -2,7 +2,6 @@ package com.learn.ms.event_service.core.domain.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @AllArgsConstructor
