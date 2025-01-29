@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.presenter.rest.api;
+package com.learn.ms.event.presenter.rest.api;
 
 import com.learn.ms.event.common.utils.ResponseUtils;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;

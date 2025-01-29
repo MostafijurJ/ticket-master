@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.data.entity;
+package com.learn.ms.event.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

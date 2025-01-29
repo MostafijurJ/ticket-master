@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.core.domain.request;
+package com.learn.ms.event.core.domain.request;
 
 import com.learn.ms.event.core.domain.enums.TicketCategory;
 import com.learn.ms.event.core.domain.model.PerformerDTO;

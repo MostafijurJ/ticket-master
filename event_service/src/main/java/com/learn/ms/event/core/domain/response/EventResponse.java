@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.core.domain.response;
+package com.learn.ms.event.core.domain.response;
 
 import com.learn.ms.event.core.domain.enums.EventStatus;
 import lombok.AllArgsConstructor;

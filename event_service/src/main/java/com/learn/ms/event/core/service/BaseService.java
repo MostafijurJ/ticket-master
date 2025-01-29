@@ -18,7 +18,6 @@ import java.util.UUID;
 public class BaseService {
     protected ObjectMapper objectMapper;
     protected ServiceLogger logger;
-    protected ModelMapper modelMapper;
     protected LocaleMessageService messageService;
     protected HttpServletRequest httpServletRequest;
 

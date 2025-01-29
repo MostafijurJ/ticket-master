@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.core.domain.enums;
+package com.learn.ms.event.core.domain.enums;
 
 import lombok.Getter;
 

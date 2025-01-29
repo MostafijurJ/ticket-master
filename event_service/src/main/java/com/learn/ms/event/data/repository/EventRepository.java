@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.data.repository;
+package com.learn.ms.event.data.repository;
 
 import com.learn.ms.event.data.entity.Event;
 import org.springframework.data.domain.Page;

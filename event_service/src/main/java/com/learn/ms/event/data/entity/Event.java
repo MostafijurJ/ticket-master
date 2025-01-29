@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.data.entity;
+package com.learn.ms.event.data.entity;
 
 import com.learn.ms.event.core.domain.enums.EventStatus;
 import jakarta.persistence.CascadeType;

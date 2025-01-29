@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.core.domain.model;
+package com.learn.ms.event.core.domain.model;
 
 import lombok.Data;
 

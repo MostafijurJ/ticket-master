@@ -1,4 +1,4 @@
-﻿package com.learn.ms.event.core.service;
+package com.learn.ms.event.core.service;
 
 import com.learn.ms.event.common.mapper.EventMapper;
 import com.learn.ms.event.core.domain.enums.EventStatus;

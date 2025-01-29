@@ -35,19 +35,15 @@
           <entry name="$MAVEN_REPOSITORY$/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar" />
           <entry name="$MAVEN_REPOSITORY$/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar" />
         </processorPath>
-        <module name="search-service" />
         <module name="gateway-service-app" />
       </profile>
-      <profile name="Annotation profile for gateway-service" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-        </processorPath>
-        <module name="gateway-service" />
         <module name="discovery-server" />
+        <module name="gateway-service" />
+        <module name="search-service" />
       </profile>
       <profile name="Annotation profile for event-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -74,11 +70,11 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="discovery-server" options="-parameters" />
+      <module name="discovery-server" options="" />
       <module name="event-service" options="-parameters" />
-      <module name="gateway-service" options="-parameters" />
+      <module name="gateway-service" options="" />
       <module name="gateway-service-app" options="-parameters" />
-      <module name="search-service" options="-parameters" />
+      <module name="search-service" options="" />
     </option>
   </component>
 </project>
