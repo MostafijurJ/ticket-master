@@ -23,6 +23,9 @@ public enum ResponseMessage {
     RECORD_ALREADY_EXIST("record.already.exist"),
     UNAUTHORIZED_RESOURCE_ACCESS("unauthorized.resource.access"),
     EVENT_CREATED("event.created"),
+    PERFORMER_ALREADY_EXISTS("performer.already.exists"),
+    PERFORMER_NOT_FOUND("performer.not.found"),
+    VENUE_NOT_FOUND("venue.not.found"),
 
 
     ;

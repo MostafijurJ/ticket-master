@@ -25,10 +25,10 @@ public abstract class BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "CREATED_BY", columnDefinition = "varchar(100) default ''")
+    @Column(name = "CREATED_BY", length = 100)
     private String createdBy;
 
-    @Column(name = "UPDATED_BY", columnDefinition = "varchar(100) default ''")
+    @Column(name = "UPDATED_BY", length = 100)
     private String updatedBy;
 
     @CreationTimestamp

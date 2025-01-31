@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Lazy;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class BaseService {
@@ -64,6 +66,16 @@ public class BaseService {
         return null;
     }
 
+    public <T> List<T> toObjectList(String jsonString, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(jsonString, objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
+        } catch (JsonProcessingException e) {
+            logger.error(e.getMessage());
+        }
+        return Collections.emptyList();
+    }
+
+
     public String getCorrelationId() {
         return CorrelationContextHolder.getCorrelationIdFromContext();
     }
@@ -99,7 +111,6 @@ public class BaseService {
     public String getRandomUUID() {
         return UUID.randomUUID().toString().replace("-", "");
     }
-
 
 
 }

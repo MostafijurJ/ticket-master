@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class PerformerDTO {
+public class DynamicId {
     private Long id;
-    private String name;
 }

@@ -8,4 +8,6 @@ public interface EventMapper {
 
     EventResponse mapToResponse(final Event entity);
 
+    Event mapRequestToEntity(final EventResponse request);
+
 }

@@ -1,7 +1,5 @@
 package com.learn.ms.search.common.handlers;
 
-
-import com.learn.ms.search.common.logger.ServiceLogger;
 import com.learn.ms.search.common.utils.ResponseUtils;
 import com.learn.ms.search.core.domain.enums.ApiResponseCode;
 import com.learn.ms.search.core.domain.enums.ResponseMessage;
@@ -11,10 +9,10 @@ import com.learn.ms.search.core.domain.exceptions.DomainException;
 import com.learn.ms.search.core.domain.exceptions.FeignClientException;
 import com.learn.ms.search.core.domain.exceptions.InterServiceCommunicationException;
 import com.learn.ms.search.core.domain.exceptions.InvalidRequestDataException;
-import com.learn.ms.search.core.domain.exceptions.MethodNotAllowedException;
 import com.learn.ms.search.core.domain.exceptions.OperationFailedException;
 import com.learn.ms.search.core.domain.exceptions.OperationHoldException;
 import com.learn.ms.search.core.domain.exceptions.RecordNotFoundException;
+import com.learn.ms.search.core.domain.exceptions.MethodNotAllowedException;
 import com.learn.ms.search.core.domain.exceptions.UnauthorizedResourceException;
 import com.learn.ms.search.core.domain.model.ApiResponse;
 import com.learn.ms.search.core.service.LocaleMessageService;
@@ -24,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,8 +37,6 @@ import java.util.Objects;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ServiceExceptionHandler extends BaseExceptionHandler {
-
-    private final ServiceLogger logger;
     private final LocaleMessageService localeMessageService;
 
     @ExceptionHandler({
@@ -52,18 +49,17 @@ public class ServiceExceptionHandler extends BaseExceptionHandler {
             UnauthorizedResourceException.class,
             RecordNotFoundException.class})
     public ResponseEntity<ApiResponse<Void>> handleCustomException(CustomRootException ex) {
-        logger.error(ex.getLocalizedMessage(), ex);
+        errorLogger.error(ex.getLocalizedMessage(), ex);
         ApiResponse<Void> apiResponse = ResponseUtils.createApiResponse(ex.getMessageCode(), getMessage(ex.getMessage()));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @ExceptionHandler({InterServiceCommunicationException.class})
     public ResponseEntity<ApiResponse<Void>> handleFeignClientException(CustomRootException ex) {
-        logger.error(ex.getLocalizedMessage(), ex);
+        errorLogger.error(ex.getLocalizedMessage(), ex);
         ApiResponse<Void> apiResponse = ResponseUtils.createApiResponse(ex.getMessageCode(), ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
-
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ApiResponse<Void>> commonException(Exception ex) {
@@ -80,19 +76,27 @@ public class ServiceExceptionHandler extends BaseExceptionHandler {
     }
 
     @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        errorLogger.error("HttpMessageNotReadableException: ", ex);
+        String message = getMessage(ResponseMessage.INVALID_REQUEST_DATA.getResponseMessage());
+        ApiResponse<Object> apiResponse = ResponseUtils.createApiResponse(ApiResponseCode.INVALID_REQUEST_DATA.getResponseCode(), message);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        Map<String, String> collect = new HashMap<>();
-        for (FieldError fieldError : ex.getFieldErrors()) {
-            collect.put(fieldError.getField(), getMessage(fieldError.getDefaultMessage()));
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
         String message = getMessage(ResponseMessage.INVALID_REQUEST_DATA.getResponseMessage());
-        ApiResponse<Object> apiResponse = ResponseUtils.createApiResponse(ApiResponseCode.INVALID_REQUEST_DATA.getResponseCode(), message, collect);
+        ApiResponse<Object> apiResponse = ResponseUtils.createApiResponse(ApiResponseCode.INVALID_REQUEST_DATA.getResponseCode(), message, errors);
 
         dropErrorLogForArgumentNotValid("****Custom Jakarta Validation Error**** ", ex.getParameter().getDeclaringClass().getName(),
                 Objects.isNull(ex.getParameter().getMethod()) ? "" : ex.getParameter().getMethod().getName(),
                 message,
-                collect);
+                errors);
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -116,7 +120,7 @@ public class ServiceExceptionHandler extends BaseExceptionHandler {
         try {
             message = localeMessageService.getLocalMessage(messageKey);
         } catch (Exception ex) {
-            logger.error(ex.getLocalizedMessage(), ex);
+            errorLogger.error(ex.getLocalizedMessage(), ex);
         }
         return StringUtils.isNotBlank(message) ? message : messageKey;
     }

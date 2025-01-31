@@ -4,7 +4,7 @@ package com.learn.ms.event.core.domain.exceptions;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;
 
 public class DomainException extends CustomRootException {
-    private static final String MESSAGE_CODE = "EAC412";
+    private static final String MESSAGE_CODE = "EES412";
 
     public DomainException(ResponseMessage message) {
         super(MESSAGE_CODE, message.getResponseMessage());

@@ -29,7 +29,7 @@ public class MessageSourceComponent extends AbstractMessageSource {
 
         String message = properties.getProperty(key);
         if (StringUtils.isBlank(message)) {
-            logger.error("Could not find message key: " + key + " in file: " + fileName);
+            logger.error("Could not find message key: " + key + ", in file: " + fileName);
             message = humanReadableText(key);
         }
         return message;

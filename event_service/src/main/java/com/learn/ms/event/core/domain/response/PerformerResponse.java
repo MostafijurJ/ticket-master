@@ -1,6 +1,5 @@
 package com.learn.ms.event.core.domain.response;
 
-import com.learn.ms.event.core.domain.enums.EventStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,19 +7,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventResponse implements Serializable {
+public class PerformerResponse implements Serializable {
     private Long id;
     private String name;
-    private String description;
-    private String eventDate;
-    private EventStatus status;
-    private VenueResponse venue;
-    private List<PerformerResponse> performers;
 }

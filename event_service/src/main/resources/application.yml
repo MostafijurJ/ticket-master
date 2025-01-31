@@ -13,3 +13,8 @@ spring:
 
 springdoc:
   paths-to-exclude: /swagger-resources/**, /v3/api-docs/**, /v2/api-docs/**
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html

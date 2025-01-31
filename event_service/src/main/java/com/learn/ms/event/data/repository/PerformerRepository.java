@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PerformerRepository extends JpaRepository<Performer, Long> {
+
+    Performer findByNameIgnoreCase(String name);
 }
