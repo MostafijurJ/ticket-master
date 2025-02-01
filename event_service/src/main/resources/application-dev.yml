@@ -54,7 +54,7 @@ redis:
   port: 6379
   password:
   database:
-    index: 11
+    index: 10
   pool:
     max:
       connection: 30

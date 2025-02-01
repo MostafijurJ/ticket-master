@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -19,8 +20,8 @@ public class EventResponse implements Serializable {
     private Long id;
     private String name;
     private String description;
-    private String eventDate;
+    private Date eventDate;
     private EventStatus status;
-    private VenueResponse venue;
-    private List<PerformerResponse> performers;
+    private VenueResponse venueResponse;
+    private List<PerformerResponse> performerResponses;
 }

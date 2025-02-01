@@ -5,6 +5,8 @@ import com.learn.ms.event.common.mapper.PerformerMapper;
 import com.learn.ms.event.common.mapper.VenueMapper;
 import com.learn.ms.event.core.domain.enums.EventStatus;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;
+import com.learn.ms.event.core.domain.enums.TicketCategory;
+import com.learn.ms.event.core.domain.enums.TicketStatus;
 import com.learn.ms.event.core.domain.exceptions.RecordNotFoundException;
 import com.learn.ms.event.core.domain.model.DynamicId;
 import com.learn.ms.event.core.domain.request.EventRequest;
@@ -13,6 +15,7 @@ import com.learn.ms.event.core.domain.response.PerformerResponse;
 import com.learn.ms.event.core.domain.response.VenueResponse;
 import com.learn.ms.event.data.entity.Event;
 import com.learn.ms.event.data.entity.Performer;
+import com.learn.ms.event.data.entity.Ticket;
 import com.learn.ms.event.data.entity.Venue;
 import com.learn.ms.event.data.repository.EventRepository;
 import com.learn.ms.event.data.repository.PerformerRepository;
@@ -24,12 +27,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +48,7 @@ public class EventServiceImpl extends BaseService implements EventService {
     private final TicketRepository ticketRepository;
     private final VenueMapper venueMapper;
     private final PerformerMapper performerMapper;
+    private final RedisTemplate<String, String> redisTemplate;
 
 
     @Override
@@ -54,13 +62,68 @@ public class EventServiceImpl extends BaseService implements EventService {
         // check if the venue is existing or not and set it to the event
         Venue venue = addVenue(eventRequest.getVenue(), event);
 
-        // create tickets for the event category and set it to the event
-        // ticket generation logic will be implemented here
-
         // Save the Event entity
         Event savedEvent = eventRepository.save(event);
+
+        // Generate tickets for the event
+        generateTickets(savedEvent, eventRequest);
+
         return createEventResponse(savedEvent, venue, performers);
     }
+
+
+    private void generateTickets(Event event, EventRequest eventRequest) {
+        List<Ticket> tickets = new ArrayList<>();
+
+        eventRequest.getTickets().forEach((category, ticketPrice) -> {
+            for (int i = 1; i <= ticketPrice.getNumberOfTickets(); i++) {
+                Ticket ticket = new Ticket();
+                ticket.setName(generateTicketName(event, category, i));
+                ticket.setPrice(BigDecimal.valueOf(ticketPrice.getPrice()));
+                ticket.setSeatNumber(generateSeatNumber(category.name(), i));
+                ticket.setCategory(category);
+                ticket.setStatus(TicketStatus.AVAILABLE);
+                ticket.setBooked(false);
+                ticket.setEvent(event);
+                tickets.add(ticket);
+            }
+        });
+
+        // Save the tickets
+        ticketRepository.saveAll(tickets);
+
+        // PUSH THIS TICKETS TO REDIS
+        pushTicketsToRedis(tickets, event);
+    }
+
+    private String generateTicketName(Event event, TicketCategory category, int i) {
+        return event.getName() + " - " + category + " - Ticket " + i;
+    }
+
+    private String generateSeatNumber(String category, int i) {
+        return category + "-" + i;
+    }
+
+    private void pushTicketsToRedis(List<Ticket> tickets, Event event) {
+        for (Ticket ticket : tickets) {
+            String ticketId = "ticket:" + ticket.getId();
+            String eventTicketsKey = "event:" + event.getId() + ":tickets:available:" + ticket.getCategory().name();
+
+            // Store ticket details in Redis Hash
+            Map<String, String> ticketDetails = new HashMap<>();
+            ticketDetails.put("id", ticket.getId().toString());
+            ticketDetails.put("category", ticket.getCategory().name());
+            ticketDetails.put("status", ticket.getStatus().name());
+            ticketDetails.put("eventId", event.getId().toString());
+            ticketDetails.put("seatNumber", ticket.getSeatNumber());
+
+            redisTemplate.opsForHash().putAll(ticketId, ticketDetails);
+
+            // Add ticket ID to the available tickets set for the category
+            redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
+        }
+    }
+
 
     @Override
     public EventResponse getEventById(Long id) {
@@ -109,8 +172,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         event.setStatus(EventStatus.CANCELLED);
         eventRepository.save(event);
 
-         Venue venue = toObject(event.getVenue(), Venue.class);
-         List<Performer> performers = toObjectList(event.getPerformers(), Performer.class);
+        Venue venue = toObject(event.getVenue(), Venue.class);
+        List<Performer> performers = toObjectList(event.getPerformers(), Performer.class);
         return createEventResponse(event, venue, performers);
     }
 
@@ -128,8 +191,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                 .toList();
 
         return eventMapper.mapToResponse(event)
-                .setVenue(venueResponse)
-                .setPerformers(performerResponseList);
+                .setVenueResponse(venueResponse)
+                .setPerformerResponses(performerResponseList);
     }
 
     private Venue addVenue(@NotNull(message = "Venue is mandatory") DynamicId venueId, Event event) {

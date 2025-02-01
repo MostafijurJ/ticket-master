@@ -2,6 +2,7 @@ package com.learn.ms.event.core.domain.request;
 
 import com.learn.ms.event.core.domain.enums.TicketCategory;
 import com.learn.ms.event.core.domain.model.DynamicId;
+import com.learn.ms.event.core.domain.model.TicketPrice;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,5 +39,5 @@ public class EventRequest implements Serializable {
     private List<DynamicId> performers;
 
     @NotNull(message = "Tickets are mandatory")
-    private Map<TicketCategory, Integer> tickets;
+    private Map<TicketCategory, TicketPrice> tickets;
 }

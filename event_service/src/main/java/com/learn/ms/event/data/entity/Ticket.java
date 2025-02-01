@@ -1,6 +1,7 @@
 package com.learn.ms.event.data.entity;
 
 import com.learn.ms.event.core.domain.enums.TicketCategory;
+import com.learn.ms.event.core.domain.enums.TicketStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,8 +37,9 @@ public class Ticket extends BaseEntity {
     @Column(name = "CATEGORY")
     private TicketCategory category;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
-    private String status;
+    private TicketStatus status;
 
     @Column(name = "BOOKED")
     private Boolean booked;
