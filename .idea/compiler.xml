@@ -69,6 +69,12 @@
         </processorPath>
         <module name="search-service" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="kafka-service" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
@@ -77,6 +83,7 @@
       <module name="event-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="gateway-service-app" options="-parameters" />
+      <module name="kafka-service" options="-parameters" />
       <module name="search-service" options="-parameters" />
     </option>
   </component>
