@@ -15,7 +15,6 @@ import java.util.Date;
 public class EventWrapper<T> implements Serializable {
     private String eventId;
     private String correlationId;
-    private String userContext;
     private Date eventDate;
     private T data;
 }

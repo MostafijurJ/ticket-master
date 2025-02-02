@@ -79,7 +79,7 @@ public class TicketService extends BaseService {
         ticketDetails.put("id", ticket.getId().toString());
         ticketDetails.put("category", ticket.getCategory().name());
         ticketDetails.put("status", ticket.getStatus().name());
-        ticketDetails.put("eventId", ticket.getEvent().getId().toString());
+        ticketDetails.put("eventId", ticket.getEventId().toString());
         ticketDetails.put("seatNumber", ticket.getSeatNumber());
 
         redisTemplate.opsForHash().putAll(ticketId, ticketDetails);

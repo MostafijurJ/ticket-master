@@ -47,11 +47,19 @@
         <map-struct.version>1.5.5.Final</map-struct.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <kafka.lib.version>1.0</kafka.lib.version>
 
 
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.learn.ms</groupId>
+            <artifactId>kafka-service</artifactId>
+            <version>${kafka.lib.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

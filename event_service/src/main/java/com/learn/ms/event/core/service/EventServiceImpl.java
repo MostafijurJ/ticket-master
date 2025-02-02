@@ -7,6 +7,7 @@ import com.learn.ms.event.core.domain.enums.EventStatus;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;
 import com.learn.ms.event.core.domain.enums.TicketCategory;
 import com.learn.ms.event.core.domain.enums.TicketStatus;
+import com.learn.ms.event.core.domain.event.TicketGenerationEvent;
 import com.learn.ms.event.core.domain.exceptions.RecordNotFoundException;
 import com.learn.ms.event.core.domain.model.DynamicId;
 import com.learn.ms.event.core.domain.request.EventRequest;
@@ -21,6 +22,7 @@ import com.learn.ms.event.data.repository.EventRepository;
 import com.learn.ms.event.data.repository.PerformerRepository;
 import com.learn.ms.event.data.repository.TicketRepository;
 import com.learn.ms.event.data.repository.VenueRepository;
+import com.learn.ms.event.presenter.producer.ProducerService;
 import com.learn.ms.event.presenter.service.EventService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
@@ -49,6 +51,7 @@ public class EventServiceImpl extends BaseService implements EventService {
     private final VenueMapper venueMapper;
     private final PerformerMapper performerMapper;
     private final RedisTemplate<String, String> redisTemplate;
+    private final ProducerService producerService;
 
 
     @Override
@@ -66,63 +69,17 @@ public class EventServiceImpl extends BaseService implements EventService {
         Event savedEvent = eventRepository.save(event);
 
         // Generate tickets for the event
-        generateTickets(savedEvent, eventRequest);
+
+        TicketGenerationEvent ticketGenerationEvent = new TicketGenerationEvent()
+                .setEventId(savedEvent.getId())
+                .setEventName(savedEvent.getName())
+                .setTickets(eventRequest.getTickets());
+
+        producerService.produceTicketGenerationEvent(ticketGenerationEvent, getCorrelationId());
 
         return createEventResponse(savedEvent, venue, performers);
     }
 
-
-    private void generateTickets(Event event, EventRequest eventRequest) {
-        List<Ticket> tickets = new ArrayList<>();
-
-        eventRequest.getTickets().forEach((category, ticketPrice) -> {
-            for (int i = 1; i <= ticketPrice.getNumberOfTickets(); i++) {
-                Ticket ticket = new Ticket();
-                ticket.setName(generateTicketName(event, category, i));
-                ticket.setPrice(BigDecimal.valueOf(ticketPrice.getPrice()));
-                ticket.setSeatNumber(generateSeatNumber(category.name(), i));
-                ticket.setCategory(category);
-                ticket.setStatus(TicketStatus.AVAILABLE);
-                ticket.setBooked(false);
-                ticket.setEvent(event);
-                tickets.add(ticket);
-            }
-        });
-
-        // Save the tickets
-        ticketRepository.saveAll(tickets);
-
-        // PUSH THIS TICKETS TO REDIS
-        pushTicketsToRedis(tickets, event);
-    }
-
-    private String generateTicketName(Event event, TicketCategory category, int i) {
-        return event.getName() + " - " + category + " - Ticket " + i;
-    }
-
-    private String generateSeatNumber(String category, int i) {
-        return category + "-" + i;
-    }
-
-    private void pushTicketsToRedis(List<Ticket> tickets, Event event) {
-        for (Ticket ticket : tickets) {
-            String ticketId = "ticket:" + ticket.getId();
-            String eventTicketsKey = "event:" + event.getId() + ":tickets:available:" + ticket.getCategory().name();
-
-            // Store ticket details in Redis Hash
-            Map<String, String> ticketDetails = new HashMap<>();
-            ticketDetails.put("id", ticket.getId().toString());
-            ticketDetails.put("category", ticket.getCategory().name());
-            ticketDetails.put("status", ticket.getStatus().name());
-            ticketDetails.put("eventId", event.getId().toString());
-            ticketDetails.put("seatNumber", ticket.getSeatNumber());
-
-            redisTemplate.opsForHash().putAll(ticketId, ticketDetails);
-
-            // Add ticket ID to the available tickets set for the category
-            redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
-        }
-    }
 
 
     @Override
@@ -175,6 +132,59 @@ public class EventServiceImpl extends BaseService implements EventService {
         Venue venue = toObject(event.getVenue(), Venue.class);
         List<Performer> performers = toObjectList(event.getPerformers(), Performer.class);
         return createEventResponse(event, venue, performers);
+    }
+
+
+    @Override
+    public void generateTicket(TicketGenerationEvent eventRequest) {
+        List<Ticket> tickets = new ArrayList<>();
+        eventRequest.getTickets().forEach((category, ticketPrice) -> {
+            for (int i = 1; i <= ticketPrice.getNumberOfTickets(); i++) {
+                Ticket ticket = new Ticket();
+                ticket.setName(generateTicketName(eventRequest.getEventName(), category, i));
+                ticket.setPrice(BigDecimal.valueOf(ticketPrice.getPrice()));
+                ticket.setSeatNumber(generateSeatNumber(category.name(), i));
+                ticket.setCategory(category);
+                ticket.setStatus(TicketStatus.AVAILABLE);
+                ticket.setBooked(false);
+                ticket.setEventId(eventRequest.getEventId());
+                tickets.add(ticket);
+            }
+        });
+
+        // Save the tickets
+        ticketRepository.saveAll(tickets);
+
+        // PUSH THIS TICKETS TO REDIS
+        pushTicketsToRedis(tickets, eventRequest);
+    }
+
+    private String generateTicketName(String eventName, TicketCategory category, int i) {
+        return eventName + " - " + category + " - Ticket " + i;
+    }
+
+    private String generateSeatNumber(String category, int i) {
+        return category + "-" + i;
+    }
+
+    private void pushTicketsToRedis(List<Ticket> tickets, TicketGenerationEvent event) {
+        for (Ticket ticket : tickets) {
+            String ticketId = "ticket:" + ticket.getId();
+            String eventTicketsKey = "event:" + event.getEventId() + ":tickets:available:" + ticket.getCategory().name();
+
+            // Store ticket details in Redis Hash
+            Map<String, String> ticketDetails = new HashMap<>();
+            ticketDetails.put("id", ticket.getId().toString());
+            ticketDetails.put("category", ticket.getCategory().name());
+            ticketDetails.put("status", ticket.getStatus().name());
+            ticketDetails.put("eventId", event.getEventId().toString());
+            ticketDetails.put("seatNumber", ticket.getSeatNumber());
+
+            redisTemplate.opsForHash().putAll(ticketId, ticketDetails);
+
+            // Add ticket ID to the available tickets set for the category
+            redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
+        }
     }
 
 

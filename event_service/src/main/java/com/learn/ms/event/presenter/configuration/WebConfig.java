@@ -21,7 +21,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import java.util.Locale;
 
 @Configuration
-@ComponentScan(basePackages = {"com.learn.ms.event"})
+@ComponentScan(basePackages = {"com.learn.ms.event","com.learn.ms.kafka"})
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

@@ -32,7 +32,6 @@ public class KafkaProducerInterceptor<T> implements ProducerInterceptor<String, 
     private ProducerRecord<String, EventWrapper<T>> createProducerRecordWithUserContext(ProducerRecord<String, EventWrapper<T>> producerRecord, String userContext) {
         EventWrapper<T> eventWrapper = producerRecord.value();
         eventWrapper.setEventDate(new Date());
-        eventWrapper.setUserContext(userContext);
 
         return new ProducerRecord<>(producerRecord.topic(), producerRecord.partition(), producerRecord.timestamp(), producerRecord.key(), eventWrapper);
     }

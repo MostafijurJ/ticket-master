@@ -13,9 +13,8 @@ ms:
       group-id: ticketing
       group-id-sms: notification-sms
       group-id-email: notification-email
-      batch-listener: true
       auto-startup: true
-      concurrency-level: 3
+      concurrency-level: 1
       session-timeout-ms: 120000
       heartbeat-interval-ms: 3000
       max-poll-interval-ms: 300000
@@ -25,5 +24,4 @@ ms:
       poll-timeout-ms: 45000
     topic:
       user-activity-log: USER_ACTIVITY_LOG
-      schedule-fund-transfer-processing: SCHEDULE_FUND_TRANSFER_PROCESSING_TOPIC
-      schedule-mfs-transaction: SCHEDULE_MFS_TRANSACTION_TOPIC
+      ticket-generation-topic: TICKET_GENERATION
