@@ -15,13 +15,11 @@ public class ServiceTracingAspect extends CommonTraceLoggerAspect {
     public void controllerAspect() {
     }
 
-    @Pointcut("execution(* com.learn.ms.search.common.aspect.ServiceTracingAspect.logService(..))")
-    public void accountServiceTrace() {
+    @Pointcut("execution(* com.learn.ms.search.core.service..*.*(..)))")
+    public void serviceTrace() {
     }
 
-
-
-    @Around("accountServiceTrace() && !noLogging()")
+    @Around("serviceTrace() && !noLogging()")
     public Object logService(final ProceedingJoinPoint joinPoint) throws Throwable {
         return trace(joinPoint);
     }

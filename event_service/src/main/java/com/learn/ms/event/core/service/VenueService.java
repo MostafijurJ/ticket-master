@@ -1,4 +1,4 @@
-package com.learn.ms.event.presenter.service;
+package com.learn.ms.event.core.service;
 
 import com.learn.ms.event.core.domain.request.VenueRequest;
 import com.learn.ms.event.core.domain.response.VenueResponse;
