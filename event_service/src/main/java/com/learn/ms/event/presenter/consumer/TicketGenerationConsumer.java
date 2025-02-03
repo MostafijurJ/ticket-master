@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CardSyncConsumer extends BaseService {
+public class TicketGenerationConsumer extends BaseService {
     private final EventService eventService;
 
     @KafkaListener(topics = "${ms.kafka.topic.ticket-generation-topic}", groupId = "${ms.kafka.consumer.group-id}")
-    public void syncDebitCardInfoConsumer(String event) {
+    public void generateTickets(String event) {
         try {
             EventWrapper<TicketGenerationEvent> eventWrapper = objectMapper.readValue(event, new TypeReference<>() {
             });

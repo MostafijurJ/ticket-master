@@ -1,6 +1,6 @@
 ms:
   kafka:
-    bootstrap-servers: localhost:19092
+    bootstrap-servers: localhost:19093
     producer:
       compression-type: snappy
       acks: all

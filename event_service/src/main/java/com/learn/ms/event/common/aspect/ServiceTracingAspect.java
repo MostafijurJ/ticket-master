@@ -11,17 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServiceTracingAspect extends CommonTraceLoggerAspect {
 
-    @Pointcut("execution(public * com.learn.ms.event_service.presenter.rest.api.*.*(..))")
+    @Pointcut("execution(public * com.learn.ms.event.presenter.rest.api.*.*(..))")
     public void controllerAspect() {
     }
 
-    @Pointcut("execution(* com.learn.ms.event.common.aspect.ServiceTracingAspect.logService(..))")
-    public void accountServiceTrace() {
+    @Pointcut("execution(* com.learn.ms.event.core.service..*.*(..)))")
+    public void serviceTrace() {
     }
 
-
-
-    @Around("accountServiceTrace() && !noLogging()")
+    @Around("serviceTrace() && !noLogging()")
     public Object logService(final ProceedingJoinPoint joinPoint) throws Throwable {
         return trace(joinPoint);
     }
