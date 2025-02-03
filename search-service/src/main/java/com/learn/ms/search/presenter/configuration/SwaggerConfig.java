@@ -1,4 +1,4 @@
-package com.learn.ms.search.presenter.configuration.feign;
+package com.learn.ms.search.presenter.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -29,10 +29,7 @@ public class SwaggerConfig {
                 .servers(List.of(
                         new Server()
                                 .url("http://localhost:1133")
-                                .description("Local Development Server"),
-                        new Server()
-                                .url("https://api.yourdomain.com")
-                                .description("Production Server")
+                                .description("Local Dev Server")
                 ));
     }
 }

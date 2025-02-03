@@ -6,7 +6,7 @@ import com.learn.ms.event.core.domain.enums.ResponseMessage;
 import com.learn.ms.event.core.domain.model.ApiResponse;
 import com.learn.ms.event.core.domain.request.EventRequest;
 import com.learn.ms.event.core.domain.response.EventResponse;
-import com.learn.ms.event.presenter.service.EventService;
+import com.learn.ms.event.core.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

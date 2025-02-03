@@ -1,4 +1,4 @@
-package com.learn.ms.event.core.service;
+package com.learn.ms.event.core.service.impl;
 
 import com.learn.ms.event.common.mapper.EventMapper;
 import com.learn.ms.event.common.mapper.PerformerMapper;
@@ -14,6 +14,8 @@ import com.learn.ms.event.core.domain.request.EventRequest;
 import com.learn.ms.event.core.domain.response.EventResponse;
 import com.learn.ms.event.core.domain.response.PerformerResponse;
 import com.learn.ms.event.core.domain.response.VenueResponse;
+import com.learn.ms.event.core.service.BaseService;
+import com.learn.ms.event.core.service.EventService;
 import com.learn.ms.event.data.entity.Event;
 import com.learn.ms.event.data.entity.Performer;
 import com.learn.ms.event.data.entity.Ticket;
@@ -23,7 +25,6 @@ import com.learn.ms.event.data.repository.PerformerRepository;
 import com.learn.ms.event.data.repository.TicketRepository;
 import com.learn.ms.event.data.repository.VenueRepository;
 import com.learn.ms.event.presenter.producer.ProducerService;
-import com.learn.ms.event.presenter.service.EventService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

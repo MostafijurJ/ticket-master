@@ -1,13 +1,14 @@
-package com.learn.ms.event.core.service;
+package com.learn.ms.event.core.service.impl;
 
 import com.learn.ms.event.common.mapper.VenueMapper;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;
 import com.learn.ms.event.core.domain.exceptions.InvalidRequestDataException;
 import com.learn.ms.event.core.domain.request.VenueRequest;
 import com.learn.ms.event.core.domain.response.VenueResponse;
+import com.learn.ms.event.core.service.BaseService;
+import com.learn.ms.event.core.service.VenueService;
 import com.learn.ms.event.data.entity.Venue;
 import com.learn.ms.event.data.repository.VenueRepository;
-import com.learn.ms.event.presenter.service.VenueService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Page;

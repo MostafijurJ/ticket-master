@@ -6,7 +6,7 @@ import com.learn.ms.event.core.domain.enums.ResponseMessage;
 import com.learn.ms.event.core.domain.model.ApiResponse;
 import com.learn.ms.event.core.domain.request.PerformerRequest;
 import com.learn.ms.event.core.domain.response.PerformerResponse;
-import com.learn.ms.event.presenter.service.PerformerService;
+import com.learn.ms.event.core.service.PerformerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

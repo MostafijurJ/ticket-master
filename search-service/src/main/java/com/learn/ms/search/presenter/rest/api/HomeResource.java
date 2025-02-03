@@ -13,12 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeResource extends BaseResource {
 
     @GetMapping("/")
-    public String test() {
-        return "Search Service is running!";
-    }
-
-
-    @GetMapping("/get")
     public ApiResponse<String> getApiResponse() {
         return ResponseUtils.createSuccessResponseObject(getMessage(ResponseMessage.OPERATION_SUCCESSFUL), "Search Service is running!");
     }

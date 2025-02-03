@@ -4,7 +4,7 @@ package com.learn.ms.event.presenter.consumer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.learn.ms.event.core.domain.event.TicketGenerationEvent;
 import com.learn.ms.event.core.service.BaseService;
-import com.learn.ms.event.presenter.service.EventService;
+import com.learn.ms.event.core.service.EventService;
 import com.learn.ms.kafka.domain.EventWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;

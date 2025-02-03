@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 public class ServiceIntegrationAspect extends CommonIntegrationLoggerAspect {
 
     @Pointcut("execution(public * com.learn.ms.search.presenter.service..*.*(..))")
-    public void accountIntegrationTrace() {
+    public void serviceIntegrationTrace() {
     }
 
-    @Around("accountIntegrationTrace()")
-    public Object traceAccountIntegration(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("serviceIntegrationTrace()")
+    public Object traceIntegration(ProceedingJoinPoint joinPoint) throws Throwable {
         return trace(joinPoint);
     }
 

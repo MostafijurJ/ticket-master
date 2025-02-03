@@ -16,7 +16,7 @@ public class ServicePerformanceAspect extends CommonPerformanceLoggerAspect {
     }
 
     @Around("repositoryPerformanceTrace())")
-    public Object accountServicePerformance(final ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object servicePerformance(final ProceedingJoinPoint joinPoint) throws Throwable {
         return tracePerformance(joinPoint);
     }
 
