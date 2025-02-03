@@ -20,6 +20,8 @@ spring:
         format_sql: false
         hbm2ddl:
           auto: update
+  config:
+    import: kafka-dev.yml
 
 datasource:
   master:
@@ -66,4 +68,5 @@ redis:
 
 logging:
   config: classpath:log/logback-dev.xml
+
 

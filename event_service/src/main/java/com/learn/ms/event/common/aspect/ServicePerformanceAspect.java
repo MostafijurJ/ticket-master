@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServicePerformanceAspect extends CommonPerformanceLoggerAspect {
 
-    @Pointcut("execution(public * com.learn.ms.event_service.data.repository..*.*(..))")
+    @Pointcut("execution(public * com.learn.ms.event.data.repository..*.*(..))")
     public void repositoryPerformanceTrace() {
     }
 
     @Around("repositoryPerformanceTrace())")
-    public Object accountServicePerformance(final ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object servicePerformance(final ProceedingJoinPoint joinPoint) throws Throwable {
         return tracePerformance(joinPoint);
     }
 

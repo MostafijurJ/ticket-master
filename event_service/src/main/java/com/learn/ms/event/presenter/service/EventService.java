@@ -1,5 +1,6 @@
 package com.learn.ms.event.presenter.service;
 
+import com.learn.ms.event.core.domain.event.TicketGenerationEvent;
 import com.learn.ms.event.core.domain.request.EventRequest;
 import com.learn.ms.event.core.domain.response.EventResponse;
 import org.springframework.data.domain.Page;
@@ -15,4 +16,6 @@ public interface EventService {
     EventResponse updateEvent(Long id, EventRequest eventRequest);
 
     EventResponse deleteEvent(Long id);
+
+    void generateTicket(TicketGenerationEvent data);
 }

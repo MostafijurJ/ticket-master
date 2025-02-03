@@ -10,6 +10,8 @@
         <option value="$PROJECT_DIR$/search-service/pom.xml" />
         <option value="$PROJECT_DIR$/gateway-service/pom.xml" />
         <option value="$PROJECT_DIR$/event_service/pom.xml" />
+        <option value="$PROJECT_DIR$/bs23-ib-rt-kafka-service/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka-service/pom.xml" />
       </list>
     </option>
   </component>
