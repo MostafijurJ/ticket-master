@@ -25,3 +25,4 @@ ms:
     topic:
       user-activity-log: USER_ACTIVITY_LOG
       ticket-generation-topic: TICKET_GENERATION
+      notification-topic: NOTIFICATION_TOPIC

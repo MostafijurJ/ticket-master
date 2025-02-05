@@ -1,1 +1,6 @@
 CREATE SCHEMA master;
+CREATE SCHEMA event;
+CREATE SCHEMA search;
+CREATE SCHEMA notification;
+CREATE SCHEMA report;
+CREATE SCHEMA payment;
