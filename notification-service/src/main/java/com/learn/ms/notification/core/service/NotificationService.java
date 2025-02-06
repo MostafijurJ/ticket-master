@@ -10,10 +10,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class NotificationService extends BaseService {
+    private final NotificationFactory notificationFactory;
+
     public void sendNotification(TemplateData templateData) {
         logger.trace("Sending notification to : {}", templateData);
         List<NotificationType> types = templateData.getNotificationTypes();
-        NotificationStrategy strategy = NotificationFactory.getNotificationStrategy(types);
+        INotificationStrategy strategy = notificationFactory.getNotificationStrategy(types);
         strategy.sendNotification(templateData);
     }
 }

@@ -18,5 +18,5 @@ public class TemplateData {
     private List<String> toEmailList;
     private List<String> toPhoneNumberList;
     private Integer notificationCode;
-    private Map<String, Object> templateData;
+    private Map<String, Object> additionalFields;
 }

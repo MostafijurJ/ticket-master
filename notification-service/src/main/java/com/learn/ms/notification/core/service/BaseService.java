@@ -22,24 +22,24 @@ public class BaseService {
     protected HttpServletRequest httpServletRequest;
 
     @Autowired
-    protected void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+    public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;
     }
 
     @Autowired
-    protected void setLogger(ServiceLogger logger) {
+    public void setLogger(ServiceLogger logger) {
         this.logger = logger;
     }
 
     @Lazy
     @Autowired
-    protected void setMessageService(LocaleMessageService messageService) {
+    public void setMessageService(LocaleMessageService messageService) {
         this.messageService = messageService;
     }
 
     @Lazy
     @Autowired
-    protected void setObjectMapper(ObjectMapper objectMapper) {
+    public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

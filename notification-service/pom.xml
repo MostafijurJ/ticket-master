@@ -41,6 +41,7 @@
 		<springdoc-openapi.version>2.1.0</springdoc-openapi.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<kafka.lib.version>1.0</kafka.lib.version>
+		<java.sun.mail.version>2.0.1</java.sun.mail.version>
 	</properties>
 
 	<dependencies>
@@ -73,6 +74,13 @@
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-hc5</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>jakarta.mail</artifactId>
+			<version>${java.sun.mail.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springdoc</groupId>

@@ -1,21 +1,29 @@
 package com.learn.ms.notification.core.service;
 
 import com.learn.ms.notification.core.domain.enums.NotificationType;
-import com.learn.ms.notification.core.service.impl.EmailNotification;
-import com.learn.ms.notification.core.service.impl.PushNotification;
-import com.learn.ms.notification.core.service.impl.SmsNotification;
+import com.learn.ms.notification.core.service.impl.EmailINotification;
+import com.learn.ms.notification.core.service.impl.PushINotification;
+import com.learn.ms.notification.core.service.impl.SmsINotification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationFactory {
-    public static NotificationStrategy getNotificationStrategy(List<NotificationType> notificationTypes) {
-        List<NotificationStrategy> strategies = new ArrayList<>();
+@Component
+@RequiredArgsConstructor
+public class NotificationFactory extends BaseService {
+    private final EmailINotification emailNotification;
+    private final SmsINotification smsNotification;
+    private final PushINotification pushNotification;
+
+    public INotificationStrategy getNotificationStrategy(List<NotificationType> notificationTypes) {
+        List<INotificationStrategy> strategies = new ArrayList<>();
         for (NotificationType type : notificationTypes) {
             switch (type) {
-                case SMS -> strategies.add(new SmsNotification());
-                case EMAIL -> strategies.add(new EmailNotification());
-                case PUSH -> strategies.add(new PushNotification());
+                case SMS -> strategies.add(smsNotification);
+                case EMAIL -> strategies.add(emailNotification);
+                case PUSH -> strategies.add(pushNotification);
                 default -> throw new IllegalArgumentException("Invalid notification type: " + type);
             }
         }
@@ -23,6 +31,6 @@ public class NotificationFactory {
             return strategies.get(0);
         }
 
-        return new CompositeNotification(strategies);
+        return new CompositeINotification(strategies);
     }
 }

@@ -11,8 +11,6 @@ ms:
       retry-count: ${KAFKA_RETRY_COUNT:0}
     consumer:
       group-id: ticketing
-      group-id-sms: notification-sms
-      group-id-email: notification-email
       auto-startup: true
       concurrency-level: 1
       session-timeout-ms: 120000
@@ -23,6 +21,5 @@ ms:
       max-partition-fetch-bytes-boost-factor: 1
       poll-timeout-ms: 45000
     topic:
-      user-activity-log: USER_ACTIVITY_LOG
       ticket-generation-topic: TICKET_GENERATION
       notification-topic: NOTIFICATION_TOPIC

@@ -25,7 +25,7 @@ spring:
 
 datasource:
   master:
-    url: ${MASTER_DB_URL:jdbc:postgresql://localhost:5432/ticket?currentSchema=master}
+    url: ${MASTER_DB_URL:jdbc:postgresql://localhost:5432/ticket?currentSchema=event}
     username: ${MASTER_DB_USER:user}
     password: ${MASTER_DB_PASSWORD:password}
     maximum-pool-size: 50
@@ -37,7 +37,7 @@ datasource:
     validation-timeout: 5000
     leak-detection-threshold: 60000
   slave:
-    url: ${SLAVE_DB_URL:jdbc:postgresql://localhost:5432/ticket?currentSchema=master}
+    url: ${SLAVE_DB_URL:jdbc:postgresql://localhost:5432/ticket?currentSchema=event}
     username: ${SLAVE_DB_USER:user}
     password: ${SLAVE_DB_PASSWORD:password}
     maximum-pool-size: 50

@@ -9,6 +9,19 @@ eureka:
       defaultZone: '${DISCOVERY_SERVER_URI:http://localhost:8761/eureka}'
 
 spring:
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:25}
+    username: ${MAIL_USERNAME:mrkajol550@gmail.com}
+    password: ${MAIL_PASSWORD:veam kwpj ygbj pzkl}
+    personal: ${MAIL_DISPLAY_NAME:Ticket System Notification}
+    properties:
+        mail.transport.protocol: smtp
+        mail.smtp.auth: ${MAIL_SMTP_AUTH:false}
+        mail.smtp.starttls.enable: ${MAIL_START_TLS_ENABLE:true}
+        mail.smtp.starttls.required: ${MAIL_START_TLS_REQUIRED:true}
+        mail.debug: ${MAIL_DEBUG:false}
+
   jpa:
     database-platform: postgres
     show-sql: true

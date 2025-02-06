@@ -2,9 +2,13 @@ package com.learn.ms.notification.core.service.impl;
 
 import com.learn.ms.notification.core.domain.model.TemplateData;
 import com.learn.ms.notification.core.service.BaseService;
-import com.learn.ms.notification.core.service.NotificationStrategy;
+import com.learn.ms.notification.core.service.INotificationStrategy;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-public class SmsNotification extends BaseService implements NotificationStrategy {
+@Service
+@RequiredArgsConstructor
+public class SmsINotification extends BaseService implements INotificationStrategy {
     @Override
     public void sendNotification(TemplateData templateData) {
         logger.trace("Sending SMS to :  {}", templateData.getToPhoneNumberList());

@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY target/search-service-0.1.jar search-service.jar
 
-EXPOSE 1122
+EXPOSE 1133
 
 # Set the command to run the JAR file
 CMD ["java", "-jar", "search-service.jar"]
