@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <property name="DEV_HOME" value="./logs"/>
+    <springProperty scope="context" name="SERVICE_NAME" source="spring.application.name"/>
+    <springProperty scope="context" name="SERVICE_DIR" source="log.dir"/>
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr([%t]){faint} %clr(%-40.40logger{39}){cyan} - %m%n"/>
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [Service Name: ${SERVICE_NAME}, TraceId: %X{traceId:-}, SpanId: %X{spanId:-}] --- [%t] %-40.40logger{39} : %m%n%wEx"/>
+    <property name="MAX_FILE_SIZE" value="100MB"/>
+    <property name="MAX_NO_OF_FILE" value="30"/>
+
+    <!-- Console Appender -->
+    <appender name="STDOUT_CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- Rolling File Appender Template -->
+    <appender name="TRACE_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/trace/${SERVICE_NAME}-trace.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${DEV_HOME}/trace/archive/${SERVICE_NAME}-trace-log.%d{yyyy-MM-dd-HH}.%i.log.gz</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_NO_OF_FILE}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ERROR_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/error/${SERVICE_NAME}-error.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${DEV_HOME}/error/archive/${SERVICE_NAME}-error-log.%d{yyyy-MM-dd-HH}.%i.log.gz</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_NO_OF_FILE}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Integration Trace File Appender -->
+    <appender name="INTEGRATION_TRACE_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/integration/${SERVICE_NAME}-integration.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${DEV_HOME}/integration/archive/${SERVICE_NAME}-integration-log.%d{yyyy-MM-dd-HH}.%i.log.gz</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_NO_OF_FILE}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Integration Performance File Appender -->
+    <appender name="INTEGRATION_PERFORMANCE_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/integration/${SERVICE_NAME}-performance.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${DEV_HOME}/integration/archive/${SERVICE_NAME}-performance-log.%d{yyyy-MM-dd-HH}.%i.log.gz</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_NO_OF_FILE}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Define individual loggers -->
+    <logger name="errorLogger" level="ERROR" additivity="false">
+        <appender-ref ref="ERROR_FILE_APPENDER"/>
+    </logger>
+
+    <logger name="traceLogger" level="TRACE" additivity="false">
+        <appender-ref ref="TRACE_FILE_APPENDER"/>
+    </logger>
+
+    <logger name="integrationTraceLogger" level="TRACE" additivity="false">
+        <appender-ref ref="INTEGRATION_TRACE_FILE_APPENDER"/>
+    </logger>
+
+    <logger name="integrationPerformanceLogger" level="TRACE" additivity="false">
+        <appender-ref ref="INTEGRATION_PERFORMANCE_FILE_APPENDER"/>
+    </logger>
+
+</configuration>
