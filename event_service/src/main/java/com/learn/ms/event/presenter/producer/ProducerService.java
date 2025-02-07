@@ -18,12 +18,19 @@ public class ProducerService extends BaseService {
     @Value(value = "${ms.kafka.topic.ticket-generation-topic}")
     private String ticketGenerationTopicName;
 
+    @Value(value = "${ms.kafka.topic.push-elastic-topic}")
+    private String pushElasticTopicName;
 
     private final CommonProducer commonProducer;
 
 
     public void produceTicketGenerationEvent(Object event, String correlationId) {
         commonProducer.sendMessageAsync(ticketGenerationTopicName, getEventObject(correlationId, event));
+    }
+
+
+    public void produceElasticSearchDate(Object event, String correlationId) {
+        commonProducer.sendMessageAsync(pushElasticTopicName, getEventObject(correlationId, event));
     }
 
 

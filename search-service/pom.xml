@@ -48,16 +48,35 @@
         <map-struct.version>1.5.5.Final</map-struct.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-
+        <kafka.lib.version>1.0</kafka.lib.version>
+        <elasticsearch.version>8.14.2</elasticsearch.version>
+        <postgresql.version>42.7.5</postgresql.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.5</version>
+            <version>${postgresql.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.learn.ms</groupId>
+            <artifactId>kafka-service</artifactId>
+            <version>${kafka.lib.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-elasticsearch</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>

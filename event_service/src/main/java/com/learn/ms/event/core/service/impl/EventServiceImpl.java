@@ -7,6 +7,7 @@ import com.learn.ms.event.core.domain.enums.EventStatus;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;
 import com.learn.ms.event.core.domain.enums.TicketCategory;
 import com.learn.ms.event.core.domain.enums.TicketStatus;
+import com.learn.ms.event.core.domain.event.EventDataForElastic;
 import com.learn.ms.event.core.domain.event.TicketGenerationEvent;
 import com.learn.ms.event.core.domain.exceptions.RecordNotFoundException;
 import com.learn.ms.event.core.domain.model.DynamicId;
@@ -78,9 +79,19 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         producerService.produceTicketGenerationEvent(ticketGenerationEvent, getCorrelationId());
 
-        return createEventResponse(savedEvent, venue, performers);
+        EventResponse eventResponse = createEventResponse(savedEvent, venue, performers);
+
+        // Push the event data to ElasticSearch
+        producerService.produceElasticSearchDate(getEventDataForElastic(eventResponse), getCorrelationId());
+
+        return eventResponse;
     }
 
+    private EventDataForElastic getEventDataForElastic(EventResponse eventResponse) {
+        return new EventDataForElastic()
+                .setEventResponse(eventResponse)
+                .setDetailsUrl("/api/v1/events/get/{id}");
+    }
 
 
     @Override
@@ -118,7 +129,10 @@ public class EventServiceImpl extends BaseService implements EventService {
         }
 
         eventRepository.save(event);
-        return createEventResponse(event, venue, performers);
+
+        EventResponse eventResponse = createEventResponse(event, venue, performers);
+        producerService.produceElasticSearchDate(getEventDataForElastic(eventResponse), getCorrelationId());
+        return eventResponse;
     }
 
 
