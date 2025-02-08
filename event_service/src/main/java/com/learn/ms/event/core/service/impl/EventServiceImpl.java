@@ -59,6 +59,9 @@ public class EventServiceImpl extends BaseService implements EventService {
     private final RedisTemplate<String, String> redisTemplate;
     private final ProducerService producerService;
 
+    private static final String EVENT_TICKETS_AVAILABLE = "event:%s:tickets:available:%s";
+
+
 
     @Override
     @Transactional
@@ -220,7 +223,7 @@ public class EventServiceImpl extends BaseService implements EventService {
     private void pushTicketsToRedis(List<Ticket> tickets, TicketGenerationEvent event) {
         for (Ticket ticket : tickets) {
             String ticketId = "ticket:" + ticket.getId();
-            String eventTicketsKey = "event:" + event.getEventId() + ":tickets:available:" + ticket.getCategory().name();
+            String eventTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, event.getEventId().toString(), ticket.getCategory().name());
 
             // Store ticket details in Redis Hash
             Map<String, String> ticketDetails = new HashMap<>();
@@ -231,9 +234,10 @@ public class EventServiceImpl extends BaseService implements EventService {
             ticketDetails.put("seatNumber", ticket.getSeatNumber());
 
             redisTemplate.opsForHash().putAll(ticketId, ticketDetails);
-
             // Add ticket ID to the available tickets set for the category
-            redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
+            Long add = redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
+            System.out.println("Added to set [" + eventTicketsKey + "]: " + ticketId + " (Success: " + add + ")");
+
         }
     }
 

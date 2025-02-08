@@ -4,8 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum TicketCategory {
-    VIP,
     REGULAR,
-    PREMIUM,
-    ECONOMY
+    PREMIUM
 }

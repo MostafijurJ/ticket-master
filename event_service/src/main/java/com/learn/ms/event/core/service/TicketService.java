@@ -1,7 +1,9 @@
 package com.learn.ms.event.core.service;
 
+import com.learn.ms.event.common.mapper.TicketMapper;
 import com.learn.ms.event.core.domain.enums.TicketCategory;
 import com.learn.ms.event.core.domain.enums.TicketStatus;
+import com.learn.ms.event.core.domain.response.TicketResponse;
 import com.learn.ms.event.data.entity.Ticket;
 import com.learn.ms.event.data.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class TicketService extends BaseService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final TicketRepository ticketRepository;
+    private final TicketMapper ticketMapper;
 
-    private static final String EVENT_TICKETS_AVAILABLE = "event:%d:tickets:available:%s";
+    private static final String EVENT_TICKETS_AVAILABLE = "event:%s:tickets:available:%s";
     private static final String EVENT_TICKETS_BOOKED = "event:%d:tickets:booked";
     private static final String EVENT_TICKETS_KEY = "event:%d:tickets";
 
@@ -53,10 +57,31 @@ public class TicketService extends BaseService {
         }
     }
 
-    public long getAvailableTicketCount(Long eventId, TicketCategory category) {
-        String availableTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, eventId, category.name());
-        Long size = redisTemplate.opsForSet().size(availableTicketsKey);
-        return size != null ? size : 0;
+    // need a method which will return list of available tickets for a given event and category
+    public List<TicketResponse> getAvailableTickets(Long eventId) {
+        String availableTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, eventId, TicketCategory.REGULAR.name());
+        Set<Object> members = redisTemplate.opsForSet().members(availableTicketsKey);
+
+        return List.of();
+
+    }
+
+
+    public Map<String, Object> getAvailableTicketCount(Long eventId) {
+        String availableTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, eventId.toString(), TicketCategory.REGULAR.name());
+        Long availableRegular = redisTemplate.opsForSet().size(availableTicketsKey);
+
+
+        redisTemplate.opsForSet().add("devtest", "Your need to get the value from the database");
+
+        String availablePremiumKey = String.format(EVENT_TICKETS_AVAILABLE, eventId, TicketCategory.PREMIUM.name());
+        Long premium = redisTemplate.opsForSet().size(availablePremiumKey);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put(TicketCategory.REGULAR.name(), availableRegular);
+        response.put(TicketCategory.PREMIUM.name(), premium);
+
+        return response;
     }
 
 
