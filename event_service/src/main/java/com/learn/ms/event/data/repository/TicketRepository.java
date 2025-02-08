@@ -11,4 +11,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     List<Ticket> findAllByEventIdAndActiveTrue(Long eventId);
 
+    List<Ticket> findAllByIdIn(List<Object> ticketIds);
 }

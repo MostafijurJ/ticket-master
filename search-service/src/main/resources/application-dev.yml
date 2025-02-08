@@ -69,3 +69,9 @@ redis:
 logging:
   config: classpath:log/logback-dev.xml
 
+elasticsearch:
+  host: ${ELASTICSEARCH_URI:localhost}
+  port: ${ELASTICSEARCH_PORT:9200}
+  username: ${ELASTICSEARCH_USER:elastic}
+  password: ${ELASTICSEARCH_PASSWORD:password}
+  secure: ${ELASTICSEARCH_SECURE:true}

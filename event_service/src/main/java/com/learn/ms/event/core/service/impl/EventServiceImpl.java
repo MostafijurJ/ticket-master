@@ -3,10 +3,15 @@ package com.learn.ms.event.core.service.impl;
 import com.learn.ms.event.common.mapper.EventMapper;
 import com.learn.ms.event.common.mapper.PerformerMapper;
 import com.learn.ms.event.common.mapper.VenueMapper;
+import com.learn.ms.event.common.utils.DateTimeUtils;
 import com.learn.ms.event.core.domain.enums.EventStatus;
+import com.learn.ms.event.core.domain.enums.FeatureCode;
+import com.learn.ms.event.core.domain.enums.NotificationType;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;
 import com.learn.ms.event.core.domain.enums.TicketCategory;
 import com.learn.ms.event.core.domain.enums.TicketStatus;
+import com.learn.ms.event.core.domain.event.EventDataForElastic;
+import com.learn.ms.event.core.domain.event.NotificationTemplateEvent;
 import com.learn.ms.event.core.domain.event.TicketGenerationEvent;
 import com.learn.ms.event.core.domain.exceptions.RecordNotFoundException;
 import com.learn.ms.event.core.domain.model.DynamicId;
@@ -54,6 +59,9 @@ public class EventServiceImpl extends BaseService implements EventService {
     private final RedisTemplate<String, String> redisTemplate;
     private final ProducerService producerService;
 
+    private static final String EVENT_TICKETS_AVAILABLE = "event:%s:tickets:available:%s";
+
+
 
     @Override
     @Transactional
@@ -78,9 +86,50 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         producerService.produceTicketGenerationEvent(ticketGenerationEvent, getCorrelationId());
 
-        return createEventResponse(savedEvent, venue, performers);
+        EventResponse eventResponse = createEventResponse(savedEvent, venue, performers);
+
+        // Push the event data to ElasticSearch
+        producerService.produceElasticSearchDate(getEventDataForElastic(eventResponse), getCorrelationId());
+
+        // sent notification to the users
+
+        producerService.produceNotificationEvent(getNotificationTemplateEvent(eventResponse), getCorrelationId());
+
+        return eventResponse;
     }
 
+
+    private NotificationTemplateEvent getNotificationTemplateEvent(EventResponse eventResponse) {
+        NotificationTemplateEvent event = new NotificationTemplateEvent();
+
+        event.setNotificationTypes(List.of(NotificationType.EMAIL));
+        event.setToEmailList(List.of("ticketmaster721@yopmail.com"));
+        event.setFeatureCode(FeatureCode.EVENT_CREATION.getCode());
+
+        Map<String, Object> additionalFields = new HashMap<>();
+
+        additionalFields.put("emailSubject", "Event Created Successfully");
+        additionalFields.put("name", "Mostafijur Rahman");
+        additionalFields.put("eventName", eventResponse.getName());
+        additionalFields.put("eventDate", DateTimeUtils.formatDate(eventResponse.getEventDate()));
+        additionalFields.put("eventStatus", eventResponse.getStatus());
+        additionalFields.put("venueName", eventResponse.getVenueResponse().getName());
+        additionalFields.put("venueAddress", eventResponse.getVenueResponse().getAddress());
+        additionalFields.put("venueLocation", eventResponse.getVenueResponse().getLocation());
+
+        additionalFields.put("performers", eventResponse.getPerformerResponses());
+
+        event.setAdditionalFields(additionalFields);
+
+
+        return event;
+    }
+
+    private EventDataForElastic getEventDataForElastic(EventResponse eventResponse) {
+        return new EventDataForElastic()
+                .setEventResponse(eventResponse)
+                .setDetailsUrl("/api/v1/events/get/{id}");
+    }
 
 
     @Override
@@ -118,7 +167,10 @@ public class EventServiceImpl extends BaseService implements EventService {
         }
 
         eventRepository.save(event);
-        return createEventResponse(event, venue, performers);
+
+        EventResponse eventResponse = createEventResponse(event, venue, performers);
+        producerService.produceElasticSearchDate(getEventDataForElastic(eventResponse), getCorrelationId());
+        return eventResponse;
     }
 
 
@@ -171,7 +223,7 @@ public class EventServiceImpl extends BaseService implements EventService {
     private void pushTicketsToRedis(List<Ticket> tickets, TicketGenerationEvent event) {
         for (Ticket ticket : tickets) {
             String ticketId = "ticket:" + ticket.getId();
-            String eventTicketsKey = "event:" + event.getEventId() + ":tickets:available:" + ticket.getCategory().name();
+            String eventTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, event.getEventId().toString(), ticket.getCategory().name());
 
             // Store ticket details in Redis Hash
             Map<String, String> ticketDetails = new HashMap<>();
@@ -182,9 +234,10 @@ public class EventServiceImpl extends BaseService implements EventService {
             ticketDetails.put("seatNumber", ticket.getSeatNumber());
 
             redisTemplate.opsForHash().putAll(ticketId, ticketDetails);
-
             // Add ticket ID to the available tickets set for the category
-            redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
+            Long add = redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
+            System.out.println("Added to set [" + eventTicketsKey + "]: " + ticketId + " (Success: " + add + ")");
+
         }
     }
 

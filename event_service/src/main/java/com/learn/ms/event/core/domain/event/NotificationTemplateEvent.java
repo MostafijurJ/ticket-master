@@ -1,6 +1,6 @@
-package com.learn.ms.notification.core.domain.model;
+package com.learn.ms.event.core.domain.event;
 
-import com.learn.ms.notification.core.domain.enums.NotificationType;
+import com.learn.ms.event.core.domain.enums.NotificationType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class TemplateData {
+public class NotificationTemplateEvent {
     private List<NotificationType> notificationTypes;
     private List<String> toEmailList;
     private List<String> toPhoneNumberList;
