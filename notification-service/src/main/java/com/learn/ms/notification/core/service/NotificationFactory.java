@@ -1,5 +1,6 @@
 package com.learn.ms.notification.core.service;
 
+import com.learn.ms.notification.common.annotations.NoLogging;
 import com.learn.ms.notification.core.domain.enums.NotificationType;
 import com.learn.ms.notification.core.service.impl.EmailINotification;
 import com.learn.ms.notification.core.service.impl.PushINotification;
@@ -17,6 +18,7 @@ public class NotificationFactory extends BaseService {
     private final SmsINotification smsNotification;
     private final PushINotification pushNotification;
 
+    @NoLogging
     public INotificationStrategy getNotificationStrategy(List<NotificationType> notificationTypes) {
         List<INotificationStrategy> strategies = new ArrayList<>();
         for (NotificationType type : notificationTypes) {
@@ -27,10 +29,6 @@ public class NotificationFactory extends BaseService {
                 default -> throw new IllegalArgumentException("Invalid notification type: " + type);
             }
         }
-        if (strategies.size() == 1) {
-            return strategies.get(0);
-        }
-
         return new CompositeINotification(strategies);
     }
 }

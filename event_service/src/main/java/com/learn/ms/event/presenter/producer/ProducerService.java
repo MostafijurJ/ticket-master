@@ -23,6 +23,9 @@ public class ProducerService extends BaseService {
 
     private final CommonProducer commonProducer;
 
+    @Value(value = "${ms.kafka.topic.notification-topic}")
+    private String notificationTopicName;
+
 
     public void produceTicketGenerationEvent(Object event, String correlationId) {
         commonProducer.sendMessageAsync(ticketGenerationTopicName, getEventObject(correlationId, event));
@@ -31,6 +34,10 @@ public class ProducerService extends BaseService {
 
     public void produceElasticSearchDate(Object event, String correlationId) {
         commonProducer.sendMessageAsync(pushElasticTopicName, getEventObject(correlationId, event));
+    }
+
+    public void produceNotificationEvent(Object event, String correlationId) {
+        commonProducer.sendMessageAsync(notificationTopicName, getEventObject(correlationId, event));
     }
 
 

@@ -10,16 +10,17 @@ import java.util.Arrays;
 @Getter
 public enum NotificationTemplateName {
 
-    WELCOME_EMAIL(1001, "welcome"),
+    WELCOME_EMAIL("1001", "welcome"),
+    EVENT_CREATE("1101", "event-create"),
 
     ;
 
-    private final Integer notificationCode;
+    private final String featureCode;
     private final String emailTemplateName;
 
-    public static String getEmailTemplateName(int notificationCode) {
+    public static String getEmailTemplateName(String featureCode) {
         NotificationTemplateName result = Arrays.stream(NotificationTemplateName.values())
-                .filter(item -> item.getNotificationCode() == notificationCode)
+                .filter(item -> item.getFeatureCode().equalsIgnoreCase(featureCode))
                 .findFirst()
                 .orElse(null);
 

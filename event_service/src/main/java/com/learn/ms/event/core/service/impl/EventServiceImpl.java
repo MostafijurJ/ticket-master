@@ -3,11 +3,15 @@ package com.learn.ms.event.core.service.impl;
 import com.learn.ms.event.common.mapper.EventMapper;
 import com.learn.ms.event.common.mapper.PerformerMapper;
 import com.learn.ms.event.common.mapper.VenueMapper;
+import com.learn.ms.event.common.utils.DateTimeUtils;
 import com.learn.ms.event.core.domain.enums.EventStatus;
+import com.learn.ms.event.core.domain.enums.FeatureCode;
+import com.learn.ms.event.core.domain.enums.NotificationType;
 import com.learn.ms.event.core.domain.enums.ResponseMessage;
 import com.learn.ms.event.core.domain.enums.TicketCategory;
 import com.learn.ms.event.core.domain.enums.TicketStatus;
 import com.learn.ms.event.core.domain.event.EventDataForElastic;
+import com.learn.ms.event.core.domain.event.NotificationTemplateEvent;
 import com.learn.ms.event.core.domain.event.TicketGenerationEvent;
 import com.learn.ms.event.core.domain.exceptions.RecordNotFoundException;
 import com.learn.ms.event.core.domain.model.DynamicId;
@@ -84,7 +88,38 @@ public class EventServiceImpl extends BaseService implements EventService {
         // Push the event data to ElasticSearch
         producerService.produceElasticSearchDate(getEventDataForElastic(eventResponse), getCorrelationId());
 
+        // sent notification to the users
+
+        producerService.produceNotificationEvent(getNotificationTemplateEvent(eventResponse), getCorrelationId());
+
         return eventResponse;
+    }
+
+
+    private NotificationTemplateEvent getNotificationTemplateEvent(EventResponse eventResponse) {
+        NotificationTemplateEvent event = new NotificationTemplateEvent();
+
+        event.setNotificationTypes(List.of(NotificationType.EMAIL));
+        event.setToEmailList(List.of("ticketmaster721@yopmail.com"));
+        event.setFeatureCode(FeatureCode.EVENT_CREATION.getCode());
+
+        Map<String, Object> additionalFields = new HashMap<>();
+
+        additionalFields.put("emailSubject", "Event Created Successfully");
+        additionalFields.put("name", "Mostafijur Rahman");
+        additionalFields.put("eventName", eventResponse.getName());
+        additionalFields.put("eventDate", DateTimeUtils.formatDate(eventResponse.getEventDate()));
+        additionalFields.put("eventStatus", eventResponse.getStatus());
+        additionalFields.put("venueName", eventResponse.getVenueResponse().getName());
+        additionalFields.put("venueAddress", eventResponse.getVenueResponse().getAddress());
+        additionalFields.put("venueLocation", eventResponse.getVenueResponse().getLocation());
+
+        additionalFields.put("performers", eventResponse.getPerformerResponses());
+
+        event.setAdditionalFields(additionalFields);
+
+
+        return event;
     }
 
     private EventDataForElastic getEventDataForElastic(EventResponse eventResponse) {

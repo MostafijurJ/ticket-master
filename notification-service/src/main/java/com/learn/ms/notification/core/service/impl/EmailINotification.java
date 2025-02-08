@@ -20,8 +20,9 @@ public class EmailINotification extends BaseService implements INotificationStra
     public void sendNotification(TemplateData templateData) {
         Map<String, Object> additionalFields = templateData.getAdditionalFields();
         String emailSubject = additionalFields.get("emailSubject").toString();
-        String templateName = getEmailNotificationTemplateName(templateData.getNotificationCode());
+        String templateName = getEmailNotificationTemplateName(templateData.getFeatureCode());
         Map<String, Object> templateValueMap = templateData.getAdditionalFields();
+
         String emailContent = NotificationUtils.prepareEmailNotificationContent(templateName, templateValueMap);
         try {
             for (String toEmail : templateData.getToEmailList()) {
@@ -35,8 +36,8 @@ public class EmailINotification extends BaseService implements INotificationStra
     }
 
 
-    private String getEmailNotificationTemplateName(Integer notificationCode) {
-        return NotificationTemplateName.getEmailTemplateName(notificationCode);
+    private String getEmailNotificationTemplateName(String featureCode) {
+        return NotificationTemplateName.getEmailTemplateName(featureCode);
     }
 }
 
