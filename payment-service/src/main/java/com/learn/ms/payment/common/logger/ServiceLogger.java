@@ -18,8 +18,12 @@ public class ServiceLogger {
     public void trace(String message) {
         traceLogger.trace(message);
     }
+
     public void trace(String message, Object... var2) {
         traceLogger.trace(message, var2);
+    }
+    public void error(String message, Object... var2) {
+        traceLogger.error(message, var2);
     }
 
     public void error(String message, Exception ex) {
