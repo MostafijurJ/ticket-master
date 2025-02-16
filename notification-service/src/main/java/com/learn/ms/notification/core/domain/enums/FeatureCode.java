@@ -1,5 +1,8 @@
 package com.learn.ms.notification.core.domain.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum FeatureCode {
 
     EVENT_CREATION("1101", "Create event"),

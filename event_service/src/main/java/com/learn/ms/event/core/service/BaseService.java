@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,8 @@ public class BaseService {
     protected static final String EVENT_TICKETS_AVAILABLE = "event:%s:tickets:available:%s";
     protected static final String EVENT_TICKETS_BOOKED = "event:%s:tickets:booked";
     protected static final String EVENT_TICKETS_KEY = "event:%s:tickets";
+    protected static final String STATUS = "status";
+
 
     @Lazy
     @Autowired
@@ -119,6 +122,10 @@ public class BaseService {
         LocalDateTime localDateTime = LocalDateTime.now();
         Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
         return instant.toEpochMilli();
+    }
+
+    protected Date getCurrentDate() {
+        return new Date();
     }
 
     public String getRandomUUID() {

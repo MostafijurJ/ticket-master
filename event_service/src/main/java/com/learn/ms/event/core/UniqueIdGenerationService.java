@@ -1,7 +1,6 @@
 package com.learn.ms.event.core;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.net.NetworkInterface;
 import java.security.SecureRandom;
@@ -24,7 +23,7 @@ public class UniqueIdGenerationService {
         this.nodeId = createNodeId();
     }
 
-    public synchronized String generateUniqueIdForTransaction(String idPrefix) {
+    public synchronized String generateUniquePNR(String idPrefix) {
         long currentTimestamp = timestamp();
 
         if (currentTimestamp < lastTimestamp)
