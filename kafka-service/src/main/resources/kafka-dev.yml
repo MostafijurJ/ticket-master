@@ -24,3 +24,5 @@ ms:
       ticket-generation-topic: TICKET_GENERATION
       notification-topic: NOTIFICATION_TOPIC
       push-elastic-topic: PUSH_TO_ELASTIC
+      payment-request-topic: PAYMENT_REQUEST_INITIATE
+      payment-post-processing-event-topic: PAYMENT_POST_PROCESSING_EVENT
