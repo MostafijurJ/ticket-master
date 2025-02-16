@@ -32,7 +32,7 @@ public class OpenApiConfiguration {
                                 .url("https://www.apache.org/licenses/LICENSE-2.0")))
                 .servers(List.of(
                         new Server()
-                                .url("http://localhost:1144")
+                                .url("http://localhost:1122")
                                 .description("Local Dev Server")
                 ));
     }

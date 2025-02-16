@@ -33,7 +33,7 @@ datasource:
     connection-timeout: 30000
     idle-timeout: 600000
     max-lifetime: 1800000
-    pool-name: AccountMasterHikariCP
+    pool-name: MasterHikariCP
     validation-timeout: 5000
     leak-detection-threshold: 60000
   slave:
@@ -45,7 +45,7 @@ datasource:
     connection-timeout: 30000
     idle-timeout: 600000
     max-lifetime: 1800000
-    pool-name: AccountSlaveHikariCP
+    pool-name: SlaveHikariCP
     validation-timeout: 5000
     leak-detection-threshold: 60000
 

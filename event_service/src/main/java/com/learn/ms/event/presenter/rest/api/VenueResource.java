@@ -33,7 +33,7 @@ public class VenueResource extends BaseResource {
     @PostMapping("/create")
     @Operation(summary = "Create Venue", description = "Creates a new venue with the provided details.")
     public ApiResponse<VenueResponse> createVenue(@RequestBody @Valid VenueRequest venue) {
-        return ResponseUtils.createSuccessResponseObject(getMessage(ResponseMessage.EVENT_CREATED), venueService.createVenue(venue));
+        return ResponseUtils.createSuccessResponseObject(getMessage(ResponseMessage.OPERATION_SUCCESSFUL), venueService.createVenue(venue));
     }
 
 

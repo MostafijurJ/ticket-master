@@ -7,10 +7,11 @@ import com.learn.ms.event.core.domain.response.TicketResponse;
 import com.learn.ms.event.data.entity.Ticket;
 import com.learn.ms.event.data.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +20,10 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class TicketService extends BaseService {
-    private final RedisTemplate<String, Object> redisTemplate;
+    public static final String STATUS = "status";
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
 
-    private static final String EVENT_TICKETS_AVAILABLE = "event:%s:tickets:available:%s";
-    private static final String EVENT_TICKETS_BOOKED = "event:%d:tickets:booked";
-    private static final String EVENT_TICKETS_KEY = "event:%d:tickets";
 
     @Transactional
     public boolean bookTicket(Long eventId, TicketCategory category) {
@@ -57,13 +55,43 @@ public class TicketService extends BaseService {
         }
     }
 
-    // need a method which will return list of available tickets for a given event and category
     public List<TicketResponse> getAvailableTickets(Long eventId) {
-        String availableTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, eventId, TicketCategory.REGULAR.name());
-        Set<Object> members = redisTemplate.opsForSet().members(availableTicketsKey);
+        List<TicketResponse> availableTickets = new ArrayList<>();
+        availableTickets.addAll(getTicketsByCategory(eventId, TicketCategory.REGULAR));
+        availableTickets.addAll(getTicketsByCategory(eventId, TicketCategory.PREMIUM));
+        return availableTickets;
+    }
 
-        return List.of();
+    private List<TicketResponse> getTicketsByCategory(Long eventId, TicketCategory category) {
+        List<TicketResponse> tickets = new ArrayList<>();
+        String ticketsKey = String.format(EVENT_TICKETS_AVAILABLE, eventId.toString(), category.name());
+        Set<Object> ticketIds = redisTemplate.opsForSet().members(ticketsKey);
 
+        if (CollectionUtils.isEmpty(ticketIds)) {
+            logger.trace("No tickets available for event: " + eventId + " and category: " + category);
+            return tickets;
+        }
+
+        for (Object ticketId : ticketIds) {
+            Map<Object, Object> ticketDetails = redisTemplate.opsForHash().entries(ticketId.toString());
+            TicketResponse ticketResponse = mapToResponse(ticketDetails);
+            tickets.add(ticketResponse);
+        }
+        return tickets;
+    }
+
+
+    private TicketResponse mapToResponse(Map<Object, Object> ticketDetails) {
+        TicketResponse ticketResponse = new TicketResponse();
+        ticketResponse.setId(Long.parseLong((String) ticketDetails.get("id")));
+        ticketResponse.setCategory(TicketCategory.valueOf((String) ticketDetails.get("category")));
+        ticketResponse.setStatus(TicketStatus.valueOf((String) ticketDetails.get(STATUS)));
+        ticketResponse.setEventId(Long.parseLong((String) ticketDetails.get("eventId")));
+        ticketResponse.setSeatNumber((String) ticketDetails.get("seatNumber"));
+
+        ticketResponse.setBooked(TicketStatus.BOOKED.equals(ticketResponse.getStatus()));
+
+        return ticketResponse;
     }
 
 
@@ -72,9 +100,7 @@ public class TicketService extends BaseService {
         Long availableRegular = redisTemplate.opsForSet().size(availableTicketsKey);
 
 
-        redisTemplate.opsForSet().add("devtest", "Your need to get the value from the database");
-
-        String availablePremiumKey = String.format(EVENT_TICKETS_AVAILABLE, eventId, TicketCategory.PREMIUM.name());
+        String availablePremiumKey = String.format(EVENT_TICKETS_AVAILABLE, eventId.toString(), TicketCategory.PREMIUM.name());
         Long premium = redisTemplate.opsForSet().size(availablePremiumKey);
 
         Map<String, Object> response = new HashMap<>();
@@ -86,7 +112,7 @@ public class TicketService extends BaseService {
 
 
     private void updateTicketStatusInRedis(String ticketId, String bookedTicketsKey) {
-        redisTemplate.opsForHash().put(ticketId, "status", TicketStatus.BOOKED.name());
+        redisTemplate.opsForHash().put(ticketId, STATUS, TicketStatus.BOOKED.name());
         redisTemplate.opsForSet().add(bookedTicketsKey, ticketId);
     }
 
@@ -103,7 +129,7 @@ public class TicketService extends BaseService {
         Map<String, String> ticketDetails = new HashMap<>();
         ticketDetails.put("id", ticket.getId().toString());
         ticketDetails.put("category", ticket.getCategory().name());
-        ticketDetails.put("status", ticket.getStatus().name());
+        ticketDetails.put(STATUS, ticket.getStatus().name());
         ticketDetails.put("eventId", ticket.getEventId().toString());
         ticketDetails.put("seatNumber", ticket.getSeatNumber());
 

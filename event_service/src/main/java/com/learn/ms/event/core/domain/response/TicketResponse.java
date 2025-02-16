@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -18,8 +17,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class TicketResponse implements Serializable {
     private Long id;
-    private String name;
-    private BigDecimal price;
     private String seatNumber;
     private TicketCategory category;
     private TicketStatus status;
