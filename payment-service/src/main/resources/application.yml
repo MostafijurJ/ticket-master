@@ -1,0 +1,19 @@
+server:
+  port: 1155
+  shutdown: graceful
+  max-http-request-header-size: 2MB
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: payment-service
+  lifecycle:
+    timeout-per-shutdown-phase: "120s"
+
+springdoc:
+  paths-to-exclude: /swagger-resources/**, /v3/api-docs/**, /v2/api-docs/**
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
