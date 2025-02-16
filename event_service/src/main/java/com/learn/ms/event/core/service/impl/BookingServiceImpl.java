@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class BookingServiceImpl extends BaseService implements BookingService {
     private static final int BOOKING_TIMEOUT = 5;
+    public static final String ACCOUNT_NUMBER = "accountNumber";
     private final ProducerService producerService;
     private final TicketRepository ticketRepository;
     private final UniqueIdGenerationService uniqueIdGenerationService;
@@ -110,7 +111,7 @@ public class BookingServiceImpl extends BaseService implements BookingService {
 
         switch (paymentDetails.getPaymentSourceType()) {
             case ACCOUNT:
-                paymentDetailsMap.put("accountNumber", paymentDetails.getAccountNumber());
+                paymentDetailsMap.put(ACCOUNT_NUMBER, paymentDetails.getAccountNumber());
                 break;
             case CARD:
                 paymentDetailsMap.put("cardNumber", paymentDetails.getCardNumber());
@@ -169,7 +170,7 @@ public class BookingServiceImpl extends BaseService implements BookingService {
         additionalFields.put("price", history.getPrice());
         additionalFields.put("transactionId", history.getTransactionId());
 
-        additionalFields.put("accountNumber", history.getAccountNumber());
+        additionalFields.put(ACCOUNT_NUMBER, history.getAccountNumber());
 
         event.setAdditionalFields(additionalFields);
 
@@ -186,7 +187,7 @@ public class BookingServiceImpl extends BaseService implements BookingService {
     }
 
     private void updateTicketStatus(String ticketKey, TicketStatus newStatus) {
-        redisTemplate.opsForHash().put(ticketKey, "status", newStatus.name());
+        redisTemplate.opsForHash().put(ticketKey, STATUS, newStatus.name());
     }
 
     private void updateTicketEntity(Long ticketId, TicketStatus newStatus) {
@@ -199,7 +200,7 @@ public class BookingServiceImpl extends BaseService implements BookingService {
     private void updateBookingHistory(BookingHistory history, PostProcessingEvent postProcessingEvent, TicketStatus newStatus) {
         history.setStatus(newStatus);
         history.setPaymentStatus(postProcessingEvent.getTransactionStatus().name());
-        history.setAccountNumber(postProcessingEvent.getPaymentDetails().get("accountNumber"));
+        history.setAccountNumber(postProcessingEvent.getPaymentDetails().get(ACCOUNT_NUMBER));
         bookingHistoryRepository.save(history);
     }
 }
