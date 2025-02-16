@@ -35,7 +35,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -56,11 +55,7 @@ public class EventServiceImpl extends BaseService implements EventService {
     private final TicketRepository ticketRepository;
     private final VenueMapper venueMapper;
     private final PerformerMapper performerMapper;
-    private final RedisTemplate<String, String> redisTemplate;
     private final ProducerService producerService;
-
-    private static final String EVENT_TICKETS_AVAILABLE = "event:%s:tickets:available:%s";
-
 
 
     @Override
@@ -226,19 +221,22 @@ public class EventServiceImpl extends BaseService implements EventService {
             String eventTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, event.getEventId().toString(), ticket.getCategory().name());
 
             // Store ticket details in Redis Hash
-            Map<String, String> ticketDetails = new HashMap<>();
-            ticketDetails.put("id", ticket.getId().toString());
-            ticketDetails.put("category", ticket.getCategory().name());
-            ticketDetails.put("status", ticket.getStatus().name());
-            ticketDetails.put("eventId", event.getEventId().toString());
-            ticketDetails.put("seatNumber", ticket.getSeatNumber());
-
+            Map<String, String> ticketDetails = createTicketDetailsMap(ticket, event);
             redisTemplate.opsForHash().putAll(ticketId, ticketDetails);
-            // Add ticket ID to the available tickets set for the category
-            Long add = redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
-            System.out.println("Added to set [" + eventTicketsKey + "]: " + ticketId + " (Success: " + add + ")");
-
+            redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
         }
+
+
+    }
+
+    private Map<String, String> createTicketDetailsMap(Ticket ticket, TicketGenerationEvent event) {
+        Map<String, String> ticketDetails = new HashMap<>();
+        ticketDetails.put("id", ticket.getId().toString());
+        ticketDetails.put("category", ticket.getCategory().name());
+        ticketDetails.put("status", ticket.getStatus().name());
+        ticketDetails.put("eventId", event.getEventId().toString());
+        ticketDetails.put("seatNumber", ticket.getSeatNumber());
+        return ticketDetails;
     }
 
 

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -22,6 +23,18 @@ public class BaseService {
     protected ServiceLogger logger;
     protected LocaleMessageService messageService;
     protected HttpServletRequest httpServletRequest;
+    protected RedisTemplate<Object, Object> redisTemplate;
+
+
+    protected static final String EVENT_TICKETS_AVAILABLE = "event:%s:tickets:available:%s";
+    protected static final String EVENT_TICKETS_BOOKED = "event:%s:tickets:booked";
+    protected static final String EVENT_TICKETS_KEY = "event:%s:tickets";
+
+    @Lazy
+    @Autowired
+    public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Autowired
     public void setHttpServletRequest(HttpServletRequest httpServletRequest) {
