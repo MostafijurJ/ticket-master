@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -216,6 +217,9 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     private void pushTicketsToRedis(List<Ticket> tickets, TicketGenerationEvent event) {
+        Event eventEntity = eventRepository.findById(event.getEventId())
+                .orElseThrow(() -> new RecordNotFoundException("Event not found with id: " + event.getEventId()));
+
         for (Ticket ticket : tickets) {
             String ticketId = "ticket:" + ticket.getId();
             String eventTicketsKey = String.format(EVENT_TICKETS_AVAILABLE, event.getEventId().toString(), ticket.getCategory().name());
@@ -224,9 +228,11 @@ public class EventServiceImpl extends BaseService implements EventService {
             Map<String, String> ticketDetails = createTicketDetailsMap(ticket, event);
             redisTemplate.opsForHash().putAll(ticketId, ticketDetails);
             redisTemplate.opsForSet().add(eventTicketsKey, ticketId);
+
+            // Set TTL for the ticket in Redis
+            long ttl = eventEntity.getEventDate().getTime() - getCurrentTimestamp();
+            redisTemplate.expire(ticketId, ttl, TimeUnit.MILLISECONDS);
         }
-
-
     }
 
     private Map<String, String> createTicketDetailsMap(Ticket ticket, TicketGenerationEvent event) {
