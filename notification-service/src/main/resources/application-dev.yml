@@ -13,7 +13,7 @@ spring:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:25}
     username: ${MAIL_USERNAME:mrkajol550@gmail.com}
-    password: ${MAIL_PASSWORD:veam kwpj ygbj pzkl}
+    password: ${MAIL_PASSWORD:*************}
     personal: ${MAIL_DISPLAY_NAME:Ticket System Notification}
     properties:
         mail.transport.protocol: smtp
