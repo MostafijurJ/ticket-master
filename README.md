@@ -29,23 +29,4 @@ requests to different microservices and includes rate limiting configuration.
 ## Prerequisites
 
 ### Running Redis with Docker
-
-To run Redis using Docker, you can use the following commands:
-
-```sh
-docker pull redis
-docker run --name redis -p 6379:6379 -d redis
-```
-
-
-## Notes for Payment Service 
-### use strategy pattern for payment gateway
-- Payment Strategy has 3 methods 
-  - collectPaymentDetails()
-  - validatePaymentDetails()
-  - processPayment()
-
-## Notes for Notification Service
-- Notification Service has 2 methods
-  - sendSMS()
-  - sendEmail()
+ There is a docker-compose file in the `root/env` directory of the project. You can run the following command to start the dependent services
