@@ -12,6 +12,7 @@ public enum NotificationTemplateName {
 
     WELCOME_EMAIL("1001", "welcome"),
     EVENT_CREATE("1101", "event-create"),
+    BOOK_TICKET("1110", "book-ticket"),
 
     ;
 

@@ -13,6 +13,7 @@ import com.learn.ms.event.core.domain.exceptions.MethodNotAllowedException;
 import com.learn.ms.event.core.domain.exceptions.OperationFailedException;
 import com.learn.ms.event.core.domain.exceptions.OperationHoldException;
 import com.learn.ms.event.core.domain.exceptions.RecordNotFoundException;
+import com.learn.ms.event.core.domain.exceptions.TicketNotAvailableException;
 import com.learn.ms.event.core.domain.exceptions.UnauthorizedResourceException;
 import com.learn.ms.event.core.domain.model.ApiResponse;
 import com.learn.ms.event.core.service.LocaleMessageService;
@@ -47,6 +48,7 @@ public class ServiceExceptionHandler extends BaseExceptionHandler {
             OperationFailedException.class,
             OperationHoldException.class,
             UnauthorizedResourceException.class,
+            TicketNotAvailableException.class,
             RecordNotFoundException.class})
     public ResponseEntity<ApiResponse<Void>> handleCustomException(CustomRootException ex) {
         errorLogger.error(ex.getLocalizedMessage(), ex);

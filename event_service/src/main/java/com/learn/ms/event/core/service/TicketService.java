@@ -20,7 +20,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class TicketService extends BaseService {
-    public static final String STATUS = "status";
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
 

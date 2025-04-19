@@ -26,6 +26,7 @@ public enum ResponseMessage {
     PERFORMER_ALREADY_EXISTS("performer.already.exists"),
     PERFORMER_NOT_FOUND("performer.not.found"),
     VENUE_NOT_FOUND("venue.not.found"),
+    TICKET_IS_NOT_AVAILABLE("ticket.is.not.available"),
 
 
     ;
