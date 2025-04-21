@@ -26,6 +26,10 @@ requests to different microservices and includes rate limiting configuration.
 - Email/SMS notifications for confirmations and reminders.
 - Report Module for the Admin to view the reports of the events and the bookings.
 
+
+## Architecture Diagram
+![ticket-master-architecture-diagram.png](ticket-master-architecture-diagram.png)
+
 ## Prerequisites
 
 ### Running Redis with Docker
